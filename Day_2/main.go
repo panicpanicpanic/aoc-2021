@@ -18,7 +18,8 @@ func main() {
 	defer f.Close()
 
 	// x/y positioning
-	var x, y int32
+	// aim/depth included here for part 2
+	var x, y, aim, depth int32
 
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
@@ -33,10 +34,16 @@ func main() {
 		switch {
 		case direction == "forward":
 			x += int32(magnitude)
+
+			if aim != 0 {
+				depth += int32(magnitude) * aim
+			}
 		case direction == "up":
 			y -= int32(magnitude)
+			aim -= int32(magnitude)
 		case direction == "down":
 			y += int32(magnitude)
+			aim += int32(magnitude)
 		}
 	}
 	if err := scanner.Err(); err != nil {
@@ -44,4 +51,5 @@ func main() {
 	}
 
 	log.Printf("part 1: x-coordinate: %d y-coordinate: %d product: %d \n", x, y, x*y)
+	log.Printf("part 2: product: %d \n", x*depth)
 }
